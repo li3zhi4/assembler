@@ -28,7 +28,7 @@ INT 10H
 ```
 ### AH=04H 读取光笔位置
 ### AH=05H 设置显示页
-```
+```assembly
 MOV AH=05H
 MOV AL=00H;页码
 ```
@@ -43,7 +43,7 @@ INT 10H
 ```
 ### AH=07H 向下滚屏
 ### AH=08H 读取光标处的字符及其属性
-```
+```assembly
 MOV AH,08H
 MOV BH,00H;页码
 INT 10H
@@ -51,18 +51,18 @@ INT 10H
 ;AL字符
 ```
 ### AH=09H 在光标处按执行属性显示字符
-```
-mov ah,09h
-mov al,'a'
-mov bh,00h
-mov bl,07h
-mov cx,01h
-int 10h
+```assembly
+MOV AH,09H
+MOV AL,'a'
+MOV BH,00H
+MOV BL,07H
+MOV CX,01H
+INT 10H
 ```
 ### AH=0AH 在光标处显示字符
 ### AH=0FH 获取当前显示模式
 ### AH=13H
-```
+```assembly
 MOV AX,CS
 MOV ES,AX
 MOV BP,00H
