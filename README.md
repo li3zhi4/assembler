@@ -13,6 +13,7 @@ INT 1AH 时钟服务 Clock Service
 
 ### bochs
 bochsrc.bxrc
+
 BXSHARE is the path of bochs
 ```
 megs: 32
