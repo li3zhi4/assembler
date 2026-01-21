@@ -8,13 +8,13 @@ ASM = nasm
 all: boot.img
 
 %.o: %.c
-	$(CC) -m32 -c $< -o $@ -ffreestanding -O2 -Wall -Wextra
+	$(CC) -m64 -mcmodel=kernel -ffreestanding -fno-pie -O2 -Wall -Wextra -c $< -o $@
 
 %.o: %.asm
-	$(ASM) -f elf32 $< -o $@
+	$(ASM) -f elf64 $< -o $@
 
 kernel.bin: $(OBJS)
-	$(LD) -m elf_i386 -Ttext 0x1000 -o $@ $^
+	$(LD) -m elf_x86_64 -Ttext 0x100000 -o $@ $^ -nostdlib
 
 boot.img: kernel.bin ../01_START/boot.bin
 	dd if=../01_START/boot.bin of=boot.img bs=512 count=1
