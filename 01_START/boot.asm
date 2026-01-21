@@ -1,47 +1,59 @@
-    org 0x7c00  ; cs:ip -> cs:7c00h
-BaseOfStack equ 0x7c00
-LableStart:
-    call Init
-    call ClearScreen
-    call SetFocus
-    call DispStr
-    call ResetFloppy
-    jmp $ ; $ -> this.location
-Init:
+[org 0x7c00]
+
+KERNEL_LOAD_ADDR equ 0x1000
+KERNEL_SECTOR equ 2
+
+start:
     mov ax, cs
-    mov ds, ax ; ds -> cs
-    mov es, ax ; es -> cs
-    mov ss, ax ; sp -> cs
-    mov sp, BaseOfStack
+    mov ds, ax
+    mov es, ax
+    mov ss, ax
+    mov sp, 0x7c00
+
+    call load_kernel
+
+    cli
+    lgdt [gdt_descriptor]
+    mov eax, cr0
+    or eax, 1
+    mov cr0, eax
+    jmp CODE_SELECTOR:protected_mode_start
+
+load_kernel:
+    mov ah, 0x02
+    mov al, 1
+    mov ch, 0
+    mov cl, KERNEL_SECTOR
+    mov dh, 0
+    mov bx, KERNEL_LOAD_ADDR
+    int 0x13
+    jc load_kernel
     ret
-DispStr:
-    mov ax, msg
-    mov bp, ax     ; bp -> msg.location
-    mov cx, len    ; cx -> msg.length
-    mov ax, 0x1301 ; ah=13h, al=01h
-    mov bx, 0x000c ; bh -> page, bl -> value 1. 0 black 1 blue 2. c red
-    mov dx, 0x0d20 ; dh -> row, dl -> column
-    int 10h        ; -> Video Service es:bp
-    ret            ; return
-ClearScreen:
-    mov     ax,     0x0600
-    mov     bx,     0x0700
-    mov     cx,     0x0000
-    mov     dx,     0x184f
-    int     10h
-    ret
-SetFocus:
-    mov     ax,     0x0200
-    mov     bx,     0x0000
-    mov     dx,     0x0000
-    int     10h
-ResetFloppy:
-    xor     ah,     ah
-    xor     dl,     dl
-    int     13h
-    ret
-msg:
-    db "Hello, os world!"
-    len equ $ - msg
-    times 510-($-$$) db 0    ; 512byte
-    dw 0xaa55                ; end
+
+gdt_start:
+    dd 0, 0
+    dw 0xffff, 0, 0x9a00, 0x00cf
+    dw 0xffff, 0, 0x9200, 0x00cf
+gdt_end:
+
+gdt_descriptor:
+    dw gdt_end - gdt_start - 1
+    dd gdt_start
+
+CODE_SELECTOR equ 0x08
+DATA_SELECTOR equ 0x10
+
+[bits 32]
+protected_mode_start:
+    mov ax, DATA_SELECTOR
+    mov ds, ax
+    mov es, ax
+    mov ss, ax
+    mov fs, ax
+    mov gs, ax
+
+    jmp KERNEL_LOAD_ADDR
+
+[bits 16]
+    times 510-($-$$) db 0
+    dw 0xaa55
