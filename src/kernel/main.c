@@ -1,10 +1,10 @@
 #include <stdint.h>
-#include "idt.h"
 #include "vga.h"
-#include "pic.h"
-#include "timer.h"
 #include "simple_fs.h"
 #include "serial.h"
+#include "idt.h"
+#include "pic.h"
+#include "timer.h"
 
 void main() {
     _clear_screen_pm();
