@@ -1,10 +1,9 @@
-[bits 32]
+[bits 64]
 global _start
 extern main
 
 _start:
-    mov esp, 0x10000
-    mov ebp, esp
+    mov rsp, 0x90000
     call main
     cli
     hlt
