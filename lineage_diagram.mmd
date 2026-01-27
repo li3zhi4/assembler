@@ -10,18 +10,11 @@ graph TB
     end
 
     subgraph DWS["DWS基础层（统一基础计算）"]
-        DWS1["t_exit_waste_hourly<br/>出口交易数据小时汇总"]
-        DWS2["t_exit_waste_by_vehicle_type_hourly<br/>按车型小时统计"]
-        DWS3["t_exit_waste_by_section_hourly<br/>按路段小时统计"]
-        DWS4["t_exit_waste_by_station_hourly<br/>按收费站小时统计"]
-        DWS5["t_exit_waste_by_pay_type_hourly<br/>按支付方式小时统计"]
-        DWS6["t_exit_waste_by_discount_type_hourly<br/>按优惠类型小时统计"]
-        DWS7["t_exit_waste_by_time_period_hourly<br/>按时段小时统计"]
-        DWS8["t_entry_waste_hourly<br/>入口交易数据小时汇总"]
-        DWS9["t_gantry_waste_hourly<br/>门架交易数据小时汇总"]
-        DWS10["t_grantry_image_hourly<br/>门架车牌识别小时汇总"]
-        DWS11["t_grantry_image_by_gantry_hourly<br/>门架车牌识别按门架小时统计"]
-        DWS12["t_equipment_coverage_hourly<br/>设备覆盖率小时汇总"]
+        DWS1["t_exit_waste_hourly<br/>出口交易数据小时汇总<br/>(统一表，含所有维度)"]
+        DWS2["t_entry_waste_hourly<br/>入口交易数据小时汇总"]
+        DWS3["t_gantry_waste_hourly<br/>门架交易数据小时汇总"]
+        DWS4["t_grantry_image_hourly<br/>门架车牌识别小时汇总"]
+        DWS5["t_equipment_coverage_hourly<br/>设备覆盖率小时汇总"]
     end
 
     subgraph ADS_Traffic["ADS层 - 交通类（ads_traffic_prod）"]
@@ -52,40 +45,33 @@ graph TB
     end
 
     ODS1 --> DWS1
-    ODS1 --> DWS2
-    ODS1 --> DWS3
-    ODS1 --> DWS4
-    ODS1 --> DWS5
-    ODS1 --> DWS6
-    ODS1 --> DWS7
-    ODS2 --> DWS8
-    ODS3 --> DWS9
-    ODS4 --> DWS10
-    ODS4 --> DWS11
-    ODS5 --> DWS12
-    ODS6 --> DWS12
-    ODS7 --> DWS12
+    ODS2 --> DWS2
+    ODS3 --> DWS3
+    ODS4 --> DWS4
+    ODS5 --> DWS5
+    ODS6 --> DWS5
+    ODS7 --> DWS5
 
     DWS1 --> ADS_T1
     DWS1 --> ADS_T2
     DWS1 --> ADS_T3
-    DWS2 --> ADS_T4
-    DWS3 --> ADS_T5
+    DWS1 --> ADS_T4
+    DWS1 --> ADS_T5
     DWS1 --> ADS_T6
-    DWS2 --> ADS_T7
-    DWS5 --> ADS_T8
-    DWS10 --> ADS_T9
-    DWS3 --> ADS_T10
-    DWS3 --> ADS_T11
+    DWS1 --> ADS_T7
+    DWS1 --> ADS_T8
+    DWS4 --> ADS_T9
+    DWS1 --> ADS_T10
+    DWS1 --> ADS_T11
 
     DWS1 --> ADS_R1
     DWS1 --> ADS_R2
-    DWS4 --> ADS_R3
+    DWS1 --> ADS_R3
     DWS1 --> ADS_R4
-    DWS6 --> ADS_R5
-    DWS4 --> ADS_R6
+    DWS1 --> ADS_R5
+    DWS1 --> ADS_R6
 
-    DWS12 --> ADS_E1
+    DWS5 --> ADS_E1
 
     style ODS fill:#e1f5ff
     style DWS fill:#fff4e1
