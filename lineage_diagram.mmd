@@ -1,0 +1,94 @@
+graph TB
+    subgraph ODS["ODS层（原始数据层）"]
+        ODS1["t_exit_waste<br/>出口交易数据表"]
+        ODS2["t_entry_waste<br/>入口交易数据表"]
+        ODS3["t_gantry_waste<br/>门架交易数据表"]
+        ODS4["t_grantry_image<br/>门架车牌识别流水表"]
+        ODS5["t_m_laneheartbeat<br/>车道心跳表"]
+        ODS6["t_m_cameraheartbeat<br/>相机心跳表"]
+        ODS7["t_m_rsuheartbeat<br/>RSU心跳表"]
+    end
+
+    subgraph DWS["DWS基础层（统一基础计算）"]
+        DWS1["t_exit_waste_hourly<br/>出口交易数据小时汇总"]
+        DWS2["t_exit_waste_by_vehicle_type_hourly<br/>按车型小时统计"]
+        DWS3["t_exit_waste_by_section_hourly<br/>按路段小时统计"]
+        DWS4["t_exit_waste_by_station_hourly<br/>按收费站小时统计"]
+        DWS5["t_exit_waste_by_pay_type_hourly<br/>按支付方式小时统计"]
+        DWS6["t_exit_waste_by_discount_type_hourly<br/>按优惠类型小时统计"]
+        DWS7["t_exit_waste_by_time_period_hourly<br/>按时段小时统计"]
+        DWS8["t_entry_waste_hourly<br/>入口交易数据小时汇总"]
+        DWS9["t_gantry_waste_hourly<br/>门架交易数据小时汇总"]
+        DWS10["t_grantry_image_hourly<br/>门架车牌识别小时汇总"]
+        DWS11["t_grantry_image_by_gantry_hourly<br/>门架车牌识别按门架小时统计"]
+        DWS12["t_equipment_coverage_hourly<br/>设备覆盖率小时汇总"]
+    end
+
+    subgraph ADS_Traffic["ADS层 - 交通类（ads_traffic_prod）"]
+        ADS_T1["t_traffic_daily<br/>日流量汇总"]
+        ADS_T2["t_traffic_monthly<br/>月度流量汇总"]
+        ADS_T3["t_traffic_fee_trend_daily<br/>日交通量/通行费趋势"]
+        ADS_T4["t_traffic_by_vehicle_type_daily<br/>日分车型流量"]
+        ADS_T5["t_traffic_by_section_daily<br/>日各路段流量"]
+        ADS_T6["t_etc_usage_rate_daily<br/>日ETC使用率"]
+        ADS_T7["t_etc_ratio_by_vehicle_type_daily<br/>日ETC通行占比（按车型）"]
+        ADS_T8["t_etc_ratio_by_pay_type_daily<br/>日ETC通行占比（按支付方式）"]
+        ADS_T9["t_plate_recognition_accuracy_daily<br/>日车牌识别准确率"]
+        ADS_T10["t_traffic_key_route_daily<br/>日重点路段流量"]
+        ADS_T11["t_traffic_key_route_hourly<br/>小时重点路段流量"]
+    end
+
+    subgraph ADS_Revenue["ADS层 - 收费类（ads_revenue_prod）"]
+        ADS_R1["t_revenue_daily<br/>日通行费收入"]
+        ADS_R2["t_revenue_monthly<br/>月度通行费收入"]
+        ADS_R3["t_revenue_station_ranking<br/>收费站收入排名"]
+        ADS_R4["t_discount_summary<br/>优惠减免汇总"]
+        ADS_R5["t_discount_by_type_daily<br/>日优惠减免（按类型）"]
+        ADS_R6["t_discount_by_station_daily<br/>日优惠减免（按收费站）"]
+    end
+
+    subgraph ADS_Equipment["ADS层 - 设备类（ads_equipment_prod）"]
+        ADS_E1["t_equipment_coverage_daily<br/>设备覆盖率日汇总"]
+    end
+
+    ODS1 --> DWS1
+    ODS1 --> DWS2
+    ODS1 --> DWS3
+    ODS1 --> DWS4
+    ODS1 --> DWS5
+    ODS1 --> DWS6
+    ODS1 --> DWS7
+    ODS2 --> DWS8
+    ODS3 --> DWS9
+    ODS4 --> DWS10
+    ODS4 --> DWS11
+    ODS5 --> DWS12
+    ODS6 --> DWS12
+    ODS7 --> DWS12
+
+    DWS1 --> ADS_T1
+    DWS1 --> ADS_T2
+    DWS1 --> ADS_T3
+    DWS2 --> ADS_T4
+    DWS3 --> ADS_T5
+    DWS1 --> ADS_T6
+    DWS2 --> ADS_T7
+    DWS5 --> ADS_T8
+    DWS10 --> ADS_T9
+    DWS3 --> ADS_T10
+    DWS3 --> ADS_T11
+
+    DWS1 --> ADS_R1
+    DWS1 --> ADS_R2
+    DWS4 --> ADS_R3
+    DWS1 --> ADS_R4
+    DWS6 --> ADS_R5
+    DWS4 --> ADS_R6
+
+    DWS12 --> ADS_E1
+
+    style ODS fill:#e1f5ff
+    style DWS fill:#fff4e1
+    style ADS_Traffic fill:#e8f5e9
+    style ADS_Revenue fill:#fce4ec
+    style ADS_Equipment fill:#f3e5f5
